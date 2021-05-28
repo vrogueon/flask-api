@@ -8,8 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 # app
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://sqlitedb.file"
-app.config["SQL_TRACK_MODIFICATIONS"] = 0
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlitedb.file"
 
 # config sqllite 3 to enforce foreing key constraints
 @event.listens_for(Engine, "connect")
@@ -39,3 +39,40 @@ class BlogPost(db.Model):
     body = db.Column(db.String(200))
     date = db.Column(db.Date)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+
+# routes
+@app.route("/user", methods=["POST"])
+def create_user():
+    pass
+
+@app.route("/user/descending_id", methods=["GET"])
+def get_all_users_descending():
+    pass
+
+@app.route("/user/<user_id>", methods=["GET"])
+def get_one_user(user_id):
+    pass
+
+@app.route("/user/<user_id>", methods=["DELETE"])
+def delete_user(user_id):
+    pass
+
+@app.route("/blog_post/<user_id>", methods=["POST"])
+def create_blog_post(user_id):
+    pass
+
+@app.route("/user/<user_id>", methods=["GET"])
+def get_all_blog_posts(user_id):
+    pass
+
+@app.route("/blog_post/<blog_post_id>", methods=["GET"])
+def get_one_blog_post(blog_post_id):
+    pass
+
+@app.route("/blog_post/<blog_post_id>", methods=["DELETE"])
+def delete_blog_post(blog_post_id):
+    pass
+
+if __name__ == "__main__":
+    app.run(debug=True)
