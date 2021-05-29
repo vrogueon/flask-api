@@ -1,10 +1,11 @@
 from sqlite3 import Connection as SQLite3Connection
 from datetime import datetime 
 from sqlalchemy.engine import Engine
-from flask import Flask, request, jsonify
+from flask import Flask, json, request, jsonify
 from sqlalchemy import event
 from flask_sqlalchemy import SQLAlchemy
 import linked_list
+import hash_table
 
 # app
 app = Flask(__name__)
@@ -122,7 +123,33 @@ def delete_user(user_id):
 
 @app.route("/blog_post/<user_id>", methods=["POST"])
 def create_blog_post(user_id):
-    pass
+    data = request.get_json()
+    user = User.query.filter_by(id=user_id).first()
+    if not user:
+        return jsonify({"message": "User doesn't exist"}), 400
+    
+    ht = hash_table.HashTable(10)
+    ht.add_key_value("title", data["title"])
+    ht.add_key_value("body", data["body"])
+    ht.add_key_value("date", now)
+    ht.add_key_value("user", user_id)
+
+    print(ht.get_value("title"))
+    print(ht.get_value("body"))
+    print(ht.get_value("date"))
+    print(ht.get_value("user"))
+
+    new_blog_post = BlogPost(
+        title=ht.get_value("title"),
+        body=ht.get_value("body"),
+        date=ht.get_value("date"),
+        user=ht.get_value("user"),
+    )
+
+    db.session.add(new_blog_post)
+    db.session.commit()
+
+    return jsonify({"message": "Post created"}), 200
 
 @app.route("/user/<user_id>", methods=["GET"])
 def get_all_blog_posts(user_id):
