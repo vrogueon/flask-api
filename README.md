@@ -1,5 +1,5 @@
 # flask-api-data-structures
-API hecha con flask implementando stacks, queues, hash table y binary search tree
+API hecha con flask implementando stacks, queues, linked lists, hash table y binary search tree
 
 ### API Doc ▶️
 https://documenter.getpostman.com/view/2006078/TzXzEHdw
